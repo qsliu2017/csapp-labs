@@ -19,9 +19,42 @@ int is_transpose(int M, int N, int A[N][M], int B[M][N]);
  *     searches for that string to identify the transpose function to
  *     be graded. 
  */
+const int m = 64, b = 5, s = 5, t = m - (b + s);
 char transpose_submit_desc[] = "Transpose submission";
 void transpose_submit(int M, int N, int A[N][M], int B[M][N])
 {
+    /* Allowed to define at most 12 local variables of type int */
+    // int var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12;
+    // switch (M)
+    // {
+    // case 32: /* M=32, N=32 */
+    //     break;
+    // case 61: /* M=61, N=67 */
+    //     break;
+    // case 64: /* M=64, N=64 */
+    //     break;
+    // }
+    int i, j;
+    for (i = 0; i < N - 7; i += 8)
+    {
+        for (j = 0; j < M - 7; j += 8)
+        {
+            for (int ii = 0; ii < 8; ii++)
+            {
+                for (int jj = 0; jj < 8; jj++)
+                {
+                    B[j + jj][i + ii] = A[i + ii][j + jj];
+                }
+            }
+        }
+    }
+    for (; i < N; i++)
+    {
+        for (; j < M; j++)
+        {
+            B[j][i] = A[i][j];
+        }
+    }
 }
 
 /* 
