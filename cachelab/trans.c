@@ -19,41 +19,108 @@ int is_transpose(int M, int N, int A[N][M], int B[M][N]);
  *     searches for that string to identify the transpose function to
  *     be graded. 
  */
-const int m = 64, b = 5, s = 5, t = m - (b + s);
 char transpose_submit_desc[] = "Transpose submission";
 void transpose_submit(int M, int N, int A[N][M], int B[M][N])
 {
-    /* Allowed to define at most 12 local variables of type int */
-    // int var1, var2, var3, var4, var5, var6, var7, var8, var9, var10, var11, var12;
-    // switch (M)
-    // {
-    // case 32: /* M=32, N=32 */
-    //     break;
-    // case 61: /* M=61, N=67 */
-    //     break;
-    // case 64: /* M=64, N=64 */
-    //     break;
-    // }
-    int i, j;
-    for (i = 0; i < N - 7; i += 8)
+    int i, j, v1, v2, v3, v4, v5, v6, v7, v8;
+    switch (M)
     {
-        for (j = 0; j < M - 7; j += 8)
-        {
-            for (int ii = 0; ii < 8; ii++)
-            {
-                for (int jj = 0; jj < 8; jj++)
+    case 32: /* M=32, N=32 */
+        for (i = 0; i < N - 7; i += 8)
+            for (j = 0; j < M - 7; j += 8)
+                for (int k = 0; k < 8; k++)
                 {
-                    B[j + jj][i + ii] = A[i + ii][j + jj];
+                    v1 = A[i + k][j],
+                    v2 = A[i + k][j + 1],
+                    v3 = A[i + k][j + 2],
+                    v4 = A[i + k][j + 3],
+                    v5 = A[i + k][j + 4],
+                    v6 = A[i + k][j + 5],
+                    v7 = A[i + k][j + 6],
+                    v8 = A[i + k][j + 7];
+
+                    B[j][i + k] = v1,
+                    B[j + 1][i + k] = v2,
+                    B[j + 2][i + k] = v3,
+                    B[j + 3][i + k] = v4,
+                    B[j + 4][i + k] = v5,
+                    B[j + 5][i + k] = v6,
+                    B[j + 6][i + k] = v7,
+                    B[j + 7][i + k] = v8;
                 }
-            }
-        }
-    }
-    for (; i < N; i++)
-    {
-        for (; j < M; j++)
-        {
-            B[j][i] = A[i][j];
-        }
+        break;
+    case 64: /* M=64, N=64 */
+        for (i = 0; i < N - 3; i += 4)
+            for (j = 0; j < M - 3; j += 4)
+                for (int k = 0; k < 4; k += 2)
+                {
+                    v1 = A[i + k][j],
+                    v2 = A[i + k][j + 1],
+                    v3 = A[i + k][j + 2],
+                    v4 = A[i + k][j + 3],
+                    v5 = A[i + k + 1][j],
+                    v6 = A[i + k + 1][j + 1],
+                    v7 = A[i + k + 1][j + 2],
+                    v8 = A[i + k + 1][j + 3];
+
+                    B[j][i + k] = v1,
+                    B[j + 1][i + k] = v2,
+                    B[j + 2][i + k] = v3,
+                    B[j + 3][i + k] = v4,
+                    B[j][i + k + 1] = v5,
+                    B[j + 1][i + k + 1] = v6,
+                    B[j + 2][i + k + 1] = v7,
+                    B[j + 3][i + k + 1] = v8;
+                }
+        break;
+    case 61: /* M=61, N=67 */
+        for (i = 0; i < N - 15; i += 16)
+            for (j = 0; j < M - 15; j += 16)
+                for (int k = 0; k < 16; k++)
+                {
+                    v1 = A[i + k][j],
+                    v2 = A[i + k][j + 1],
+                    v3 = A[i + k][j + 2],
+                    v4 = A[i + k][j + 3],
+                    v5 = A[i + k][j + 4],
+                    v6 = A[i + k][j + 5],
+                    v7 = A[i + k][j + 6],
+                    v8 = A[i + k][j + 7];
+
+                    B[j][i + k] = v1,
+                    B[j + 1][i + k] = v2,
+                    B[j + 2][i + k] = v3,
+                    B[j + 3][i + k] = v4,
+                    B[j + 4][i + k] = v5,
+                    B[j + 5][i + k] = v6,
+                    B[j + 6][i + k] = v7,
+                    B[j + 7][i + k] = v8;
+
+                    v1 = A[i + k][j + 8],
+                    v2 = A[i + k][j + 1 + 8],
+                    v3 = A[i + k][j + 2 + 8],
+                    v4 = A[i + k][j + 3 + 8],
+                    v5 = A[i + k][j + 4 + 8],
+                    v6 = A[i + k][j + 5 + 8],
+                    v7 = A[i + k][j + 6 + 8],
+                    v8 = A[i + k][j + 7 + 8];
+
+                    B[j + 8][i + k] = v1,
+                    B[j + 8 + 1][i + k] = v2,
+                    B[j + 8 + 2][i + k] = v3,
+                    B[j + 8 + 3][i + k] = v4,
+                    B[j + 8 + 4][i + k] = v5,
+                    B[j + 8 + 5][i + k] = v6,
+                    B[j + 8 + 6][i + k] = v7,
+                    B[j + 8 + 7][i + k] = v8;
+                }
+        for (int ii = 0; ii < i; ii++)
+            for (int jj = j; jj < M; jj++)
+                B[jj][ii] = A[ii][jj];
+        for (; i < N; i++)
+            for (j = 0; j < M; j++)
+                B[j][i] = A[i][j];
+        break;
     }
 }
 
